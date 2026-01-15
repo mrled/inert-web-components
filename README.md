@@ -41,3 +41,13 @@ The idea is something like "React Web Components" or "React Server Components", 
 The general idea should be implemented as excellent tests with a reference implementation in some particularly well-suited language, maybe Go or something.
 
 Originally conceived [here](https://micahrl.me/2025/10/10/idea-html-for-shortcodes/).
+
+## Design details
+
+Parser that finds special `<iwc-*>` pseudo-elements. These are just special text strings and should work similarly to Hugo shortcode tokens.
+
+The parser should parse enough HTML to ignore `<script>`, `<style>`, `<!--comments-->`, `<![CDATA[...]]>`, etc. It should then tokenize the `<iwc-*>` elements and build the IWC nodes. Everything between IWC nodes is just raw slices. It should support both closing tags like `<iwc-whatever>...</iwc-whatever>` and self-closing tags like `<iwc-whatever/>`.
+
+Similar to Hugo's shortcode language, it's garbage in / garbage out. The user can produce broken HTML this way.
+
+Users can use `&lt;iwc-whatever /&gt;` if they want, or use a convenience `<iwc-raw><iwc-whatever /></iwc-raw>` for the same thing.
